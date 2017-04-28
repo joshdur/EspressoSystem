@@ -1,0 +1,1 @@
+include ':app', ':SystemEspresso', ':rss', ':rss_core'
