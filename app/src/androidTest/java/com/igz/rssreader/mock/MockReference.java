@@ -1,7 +1,7 @@
 package com.igz.rssreader.mock;
 
 public enum MockReference {
-    SCENARIO1,
-    SCENARIO2,
+    REQUEST_NEWS_LIST_CORRECT,
+    REQUEST_NEWS_LIST_FAILED,
     SCENARIO3;
 }

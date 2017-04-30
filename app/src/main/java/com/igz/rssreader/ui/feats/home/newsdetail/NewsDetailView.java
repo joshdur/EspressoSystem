@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.igz.rssreader.R;
+
 import com.igz.rssreader.domain.RssItem;
 import com.igz.rssreader.ui.base.BaseFragmentView;
 import com.squareup.picasso.Picasso;

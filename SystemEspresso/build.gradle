@@ -7,6 +7,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
 
+
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 25
@@ -22,10 +23,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
-    compile 'com.drk.tools:gplanner-context-android:0.7'
+    compile 'com.drk.tools:gplanner-context-android:0.7.7'
 
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'junit:junit:4.12'
