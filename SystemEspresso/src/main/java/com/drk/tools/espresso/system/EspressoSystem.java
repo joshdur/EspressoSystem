@@ -195,14 +195,12 @@ public class EspressoSystem<E extends Enum> implements AndroidSystem {
             waitForViewToDisappear(viewInfo.showsAfter);
         }
 
-        Matcher<View> viewMatcher;
-        if (elementText.allViews) {
-            viewMatcher = allOf(withId(viewInfo.id));
-        } else {
-            viewMatcher = withId(viewInfo.id);
+        Throwable throwable = tryCheck(withId(viewInfo.id), ViewAssertions.matches(ViewMatchers.withText(elementText.text)));
+        if(throwable != null){
+            throwable = tryCheck(CustomMatchers.withIndex(withId(viewInfo.id), 0), ViewAssertions.matches(ViewMatchers.withText(elementText.text)));
+            throw new EspressoSystemException(throwable, "Failed to checkText in %s (checked index too)", viewInfo.toString());
         }
 
-        onView(viewMatcher).check(ViewAssertions.matches(ViewMatchers.withText(elementText.text)));
         Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
         instrumentation.waitForIdleSync();
     }

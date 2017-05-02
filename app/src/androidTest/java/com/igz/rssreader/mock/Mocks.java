@@ -3,7 +3,7 @@ package com.igz.rssreader.mock;
 public class Mocks {
 
     public static final String VALID_XML = "\n" +
-            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+            //"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
             "<rss version=\"2.0\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n" +
             "<channel>\n" +
             "  <title><![CDATA[Portada de EL PAÍS]]></title>\n" +

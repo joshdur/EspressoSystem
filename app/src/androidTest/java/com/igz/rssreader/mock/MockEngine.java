@@ -2,8 +2,11 @@ package com.igz.rssreader.mock;
 
 
 import com.drk.tools.espresso.system.EspressoSystem;
-import com.igz.rssreader.instrument.AppInjector;
-import com.igz.rssreader.instrument.Injector;
+import com.igz.rssreader.core.resource.Resources;
+import com.igz.rssreader.core.source.Source;
+import com.igz.rssreader.resource.RssProvider;
+import com.igz.rssreader.source.SourceEngine;
+import com.intelygenz.android.KeyValueKeeper;
 import com.intelygenz.android.netclient.NetClient;
 import com.intelygenz.android.netclient.NetClientException;
 import com.intelygenz.android.netclient.Request;
@@ -22,10 +25,11 @@ public class MockEngine implements EspressoSystem.MockCallback<MockReference> {
     private final MockInjector mockInjector;
     private final MockNetClient mockNetClient;
 
-    public MockEngine() {
-        this.mockInjector = mockInjector();
+    public MockEngine(MockInjector injector) {
+        this.mockInjector = injector;
         this.mockNetClient = new MockNetClient();
-        mockInjector.addMock(NetClient.class, mockInjector);
+        mockInjector.addMock(Source.class, new SourceEngine(injector.inject(KeyValueKeeper.class)));
+        mockInjector.addMock(Resources.class, new RssProvider(mockNetClient, injector.inject(Source.class)));
     }
 
     @Override
@@ -42,15 +46,6 @@ public class MockEngine implements EspressoSystem.MockCallback<MockReference> {
         }
 
     }
-
-
-    private MockInjector mockInjector() {
-        Injector initialInjector = AppInjector.getInjector();
-        MockInjector mockInjector = new MockInjector(initialInjector);
-        AppInjector.initInjector(mockInjector);
-        return mockInjector;
-    }
-
 
     private static class MockNetClient implements NetClient {
 
@@ -93,11 +88,6 @@ public class MockEngine implements EspressoSystem.MockCallback<MockReference> {
 
         @Override
         public <T> T netRequest(Request request, ResponseProcessor<T> processor) throws NetClientException {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             return processor.process(getResponse(request));
         }
 
@@ -108,27 +98,4 @@ public class MockEngine implements EspressoSystem.MockCallback<MockReference> {
     }
 
 
-    private static class MockInjector implements Injector {
-
-        private final HashMap<Class, Object> mockInjections;
-        private final Injector injector;
-
-        private MockInjector(Injector injector) {
-            this.mockInjections = new LinkedHashMap<>();
-            this.injector = injector;
-        }
-
-        void addMock(Class tClass, Object object) {
-            mockInjections.put(tClass, object);
-        }
-
-        @Override
-        public <T> T inject(Class<T> tClass) {
-            if (mockInjections.containsKey(tClass)) {
-                //noinspection unchecked
-                return (T) mockInjections.get(tClass);
-            }
-            return injector.inject(tClass);
-        }
-    }
 }

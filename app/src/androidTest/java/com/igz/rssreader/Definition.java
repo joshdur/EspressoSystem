@@ -19,10 +19,9 @@ public class Definition {
     public static String SCREEN_NEWS_DETAILS = "news_details";
 
 
-    public static AppChecker buildChecker() {
+    public static AppChecker buildChecker(MockEngine mockEngine) {
         AndroidViewInfo androidViewInfo = Definition.build();
         MainData mainData = MainData.launch(HomeActivity.class);
-        MockEngine mockEngine = new MockEngine();
         AndroidSystem androidSystem = new EspressoSystem<>(mainData, mockEngine);
         return new AppChecker(androidViewInfo, androidSystem, true);
     }
@@ -44,7 +43,7 @@ public class Definition {
                         .showsAfter(loading)
                         .build())
                 .addView(ViewInfo.builder()
-                        .id(R.id.news_holder_component_title_textview)
+                        .id(R.id.news_holder_component_imageview)
                         .showsAfter(loading)
                         .click(Action.changeToScreen(SCREEN_NEWS_DETAILS))
                         .build())
@@ -52,11 +51,14 @@ public class Definition {
                         .id(R.id.news_fragment_menu_searchview)
                         .click(Action.addViews(ViewInfo.builder()
                                 .hint("Search by title")
+                                .imeOptionsClickAction(Action.addViews(ViewInfo.builder()
+                                        .id(R.id.news_holder_component_title_textview)
+                                        .showsAfter(loading)
+                                        .build()))
                                 .build()))
                         .build())
                 .build();
     }
-
 
     private static ScreenInfo newsDetailsScreen() {
         return ScreenInfo.builder(SCREEN_NEWS_DETAILS)

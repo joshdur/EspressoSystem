@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-    compile 'com.drk.tools:gplanner-context-android:0.7.7'
+    compile 'com.drk.tools:gplanner-context-android:0.8.3'
 
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'junit:junit:4.12'
