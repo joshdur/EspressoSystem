@@ -32,11 +32,11 @@ class TestContext {
         Injector initialInjector = AppInjector.getInjector();
         MockInjector mockInjector = new MockInjector(initialInjector);
         AppInjector.initInjector(mockInjector);
-        mockClasses(mockInjector);
+        mockClasses(initialInjector, mockInjector);
     }
 
-    private static void mockClasses(MockInjector injector) {
-        injector.addMock(NetClient.class, new MockNetClient());
+    private static void mockClasses(Injector initialInjector, MockInjector injector) {
+        injector.addMock(NetClient.class, new MockNetClient(initialInjector.inject(NetClient.class)));
         injector.addMock(Source.class, new SourceEngine(injector.inject(KeyValueKeeper.class)));
         injector.addMock(Resources.class, new RssProvider(injector.inject(NetClient.class), injector.inject(Source.class)));
     }

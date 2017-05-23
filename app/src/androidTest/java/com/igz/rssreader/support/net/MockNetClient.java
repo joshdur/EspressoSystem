@@ -16,6 +16,11 @@ import java.util.Map;
 public class MockNetClient implements NetClient {
 
     private final HashMap<String, Response> hashResponse = new LinkedHashMap<>();
+    private final NetClient netClient;
+
+    public MockNetClient(NetClient netClient) {
+        this.netClient = netClient;
+    }
 
     public void setResponse(String urlMatch, int statusCode, String bodyResponse) {
         try {
@@ -29,7 +34,7 @@ public class MockNetClient implements NetClient {
         }
     }
 
-    private Response getResponse(Request request) {
+    private Response getResponse(Request request){
         Response response = hashResponse.get(request.url);
         if (response != null) {
             return response;
@@ -39,7 +44,7 @@ public class MockNetClient implements NetClient {
                 return entry.getValue();
             }
         }
-        return new Response.Builder(501).build();
+        return null;
     }
 
     @Override
@@ -54,11 +59,14 @@ public class MockNetClient implements NetClient {
 
     @Override
     public <T> T netRequest(Request request, ResponseProcessor<T> processor) throws NetClientException {
-        return processor.process(getResponse(request));
+        Response response = getResponse(request);
+        return response != null ? processor.process(response) : netClient.netRequest(request, processor);
     }
 
     @Override
     public <T> T netAuthRequest(Request request, ResponseProcessor<T> processor) throws NetClientException {
-        return processor.process(getResponse(request));
+        Response response = getResponse(request);
+        return response != null ? processor.process(response) : netClient.netAuthRequest(request, processor);
+
     }
 }
