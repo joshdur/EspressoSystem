@@ -9,20 +9,42 @@ import com.drk.tools.contextandroid.domain.ScreenInfo;
 import com.drk.tools.contextandroid.domain.ViewInfo;
 import com.drk.tools.espresso.system.EspressoSystem;
 import com.drk.tools.espresso.system.MainData;
+import com.igz.rssreader.core.resource.Resources;
+import com.igz.rssreader.core.source.Source;
+import com.igz.rssreader.instrument.AppInjector;
+import com.igz.rssreader.instrument.Injector;
 import com.igz.rssreader.mock.MockEngine;
+import com.igz.rssreader.support.injection.MockInjector;
 import com.igz.rssreader.mock.MockReference;
+import com.igz.rssreader.resource.RssProvider;
+import com.igz.rssreader.source.SourceEngine;
+import com.igz.rssreader.support.net.MockNetClient;
 import com.igz.rssreader.ui.feats.home.HomeActivity;
+import com.intelygenz.android.KeyValueKeeper;
+import com.intelygenz.android.netclient.NetClient;
 
-public class Definition {
+class TestContext {
 
-    public static String SCREEN_LIST_NEWS = "list_news";
-    public static String SCREEN_NEWS_DETAILS = "news_details";
+    static String SCREEN_LIST_NEWS = "list_news";
+    static String SCREEN_NEWS_DETAILS = "news_details";
 
+    static void initMockInjector(){
+        Injector initialInjector = AppInjector.getInjector();
+        MockInjector mockInjector = new MockInjector(initialInjector);
+        AppInjector.initInjector(mockInjector);
+        mockClasses(mockInjector);
+    }
 
-    public static AppChecker buildChecker(MockEngine mockEngine) {
-        AndroidViewInfo androidViewInfo = Definition.build();
+    private static void mockClasses(MockInjector injector) {
+        injector.addMock(NetClient.class, new MockNetClient());
+        injector.addMock(Source.class, new SourceEngine(injector.inject(KeyValueKeeper.class)));
+        injector.addMock(Resources.class, new RssProvider(injector.inject(NetClient.class), injector.inject(Source.class)));
+    }
+
+    static AppChecker buildChecker() {
+        AndroidViewInfo androidViewInfo = TestContext.build();
         MainData mainData = MainData.launch(HomeActivity.class);
-        AndroidSystem androidSystem = new EspressoSystem<>(mainData, mockEngine);
+        AndroidSystem androidSystem = new EspressoSystem<>(mainData, new MockEngine());
         return new AppChecker(androidViewInfo, androidSystem, true);
     }
 

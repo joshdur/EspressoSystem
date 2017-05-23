@@ -1,13 +1,11 @@
-package com.igz.rssreader.mock;
+package com.igz.rssreader.support.injection;
 
 import com.igz.rssreader.instrument.Injector;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-/**
- * Created by Raul on 01/05/2017.
- */
+
 public class MockInjector implements Injector {
 
     private final HashMap<Class, Object> mockInjections;
@@ -18,7 +16,7 @@ public class MockInjector implements Injector {
         this.injector = injector;
     }
 
-    void addMock(Class tClass, Object object) {
+    public void addMock(Class tClass, Object object) {
         mockInjections.put(tClass, object);
     }
 

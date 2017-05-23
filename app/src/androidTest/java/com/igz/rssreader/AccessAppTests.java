@@ -8,26 +8,21 @@ import com.drk.tools.contextandroid.domain.Scenario;
 import com.igz.rssreader.instrument.AppInjector;
 import com.igz.rssreader.instrument.Injector;
 import com.igz.rssreader.mock.MockEngine;
-import com.igz.rssreader.mock.MockInjector;
+import com.igz.rssreader.support.injection.MockInjector;
 import com.igz.rssreader.mock.MockReference;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.igz.rssreader.Definition.buildChecker;
+import static com.igz.rssreader.TestContext.buildChecker;
 
 @RunWith(AndroidJUnit4.class)
 public class AccessAppTests {
 
-	private AppChecker planner;
-
 	@Before
 	public void before(){
-		Injector initialInjector = AppInjector.getInjector();
-		MockInjector mockInjector = new MockInjector(initialInjector);
-		AppInjector.initInjector(mockInjector);
-		this.planner = buildChecker(new MockEngine(mockInjector));
+		TestContext.initMockInjector();
 	}
 
 
@@ -40,10 +35,11 @@ public class AccessAppTests {
 	public void showListOfNews() throws Throwable {
 		Scenario scenario = Scenario.builder()
 				.withMocked(MockReference.REQUEST_NEWS_LIST_CORRECT)
-				.withCheckedScreen(Definition.SCREEN_LIST_NEWS)
+				.withCheckedScreen(TestContext.SCREEN_LIST_NEWS)
 				.withElementState(R.id.news_fragment_recyclerview, ElementState.State.DISPLAYED)
 				.build();
-		planner.assertScenario(scenario, 1);
+		AppChecker appChecker = TestContext.buildChecker();
+		appChecker.assertScenario(scenario, 1);
 	}
 
 	/**
@@ -55,10 +51,11 @@ public class AccessAppTests {
 	public void showConnectivityError() throws Throwable {
 		Scenario scenario = Scenario.builder()
 				.withMocked(MockReference.REQUEST_NEWS_LIST_FAILED)
-				.withCheckedScreen(Definition.SCREEN_LIST_NEWS)
+				.withCheckedScreen(TestContext.SCREEN_LIST_NEWS)
 				.withElementState(R.id.news_fragment_info_textview, ElementState.State.DISPLAYED)
 				.build();
-		planner.assertScenario(scenario, 1);
+		AppChecker appChecker = TestContext.buildChecker();
+		appChecker.assertScenario(scenario, 1);
 	}
 
 }
