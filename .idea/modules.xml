@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/EspressoSystem.iml" filepath="$PROJECT_DIR$/EspressoSystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SystemEspresso/SystemEspresso.iml" filepath="$PROJECT_DIR$/SystemEspresso/SystemEspresso.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rss/rss.iml" filepath="$PROJECT_DIR$/rss/rss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rss_core/rss_core.iml" filepath="$PROJECT_DIR$/rss_core/rss_core.iml" />
+    </modules>
+  </component>
+</project>
